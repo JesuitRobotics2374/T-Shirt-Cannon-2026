@@ -104,4 +104,11 @@ public class ShooterSubsystem extends SubsystemBase {
     public int getShootPos() {
         return shootPos;
     }
+
+    public int getNextBarrel() {
+        if (shootPos + 1 == 7) {
+            return -1;
+        }
+        return shootPos + 1;
+    }
 }

@@ -2,15 +2,17 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
+// import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
+// import com.ctre.phoenix.motorcontrol.NeutralMode;
+// import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.CANcoder;
-import com.ctre.phoenix6.signals.AbsoluteSensorRangeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -40,9 +42,9 @@ public class PivotSubsystem extends SubsystemBase {
     public PivotSubsystem() {
         instance = this;
         pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-        pivotMotor.setInverted(true);
+        pivotMotor.getConfigurator().apply(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
         pivotEncoder.getConfigurator()
-                .apply(new MagnetSensorConfigs().withAbsoluteSensorRange(AbsoluteSensorRangeValue.Signed_PlusMinusHalf)
+                .apply(new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(0.5)
                         .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withMagnetOffset(.094));
         pivotController.enableContinuousInput(-.5, .5);
         pivotController.setTolerance(0.01, 0.01);
@@ -132,15 +134,15 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public double getAbsPos() {
-        return pivotEncoder.getAbsolutePosition().getValue();
+        return pivotEncoder.getAbsolutePosition().getValueAsDouble();
     }
 
     public double getPos() {
-        return pivotEncoder.getPosition().getValue();
+        return pivotEncoder.getPosition().getValueAsDouble();
     }
 
     public double getAngle() {
-        return pivotEncoder.getAbsolutePosition().getValue() * 360;
+        return pivotEncoder.getAbsolutePosition().getValueAsDouble() * 360;
     }
 
     public double getSetpoint() {

@@ -75,8 +75,6 @@ public class RobotContainer {
     public void configureShuffleBoard() {
         ShuffleboardTab tab = Shuffleboard.getTab(Constants.DRIVER_READOUT_TAB_NAME);
         tab.addInteger("Shot Pos", m_ShooterSubsystem::getShootPos);
-        String nbVal = m_ShooterSubsystem.getNextBarrel() == -1 ? "EMPTY"
-                : String.valueOf(m_ShooterSubsystem.getNextBarrel());
         tab.addString("Next Barrel", () -> {
             return m_ShooterSubsystem.getNextBarrel() == -1 ? "EMPTY"
                     : String.valueOf(m_ShooterSubsystem.getNextBarrel() + 1);
