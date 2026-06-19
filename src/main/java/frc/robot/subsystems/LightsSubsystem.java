@@ -1,33 +1,29 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.led.CANdle;
-import com.ctre.phoenix.led.CANdleConfiguration;
-import com.ctre.phoenix.led.ColorFlowAnimation;
-import com.ctre.phoenix.led.ColorFlowAnimation.Direction;
-import com.ctre.phoenix.led.FireAnimation;
-import com.ctre.phoenix.led.LarsonAnimation;
-import com.ctre.phoenix.led.RainbowAnimation;
-import com.ctre.phoenix.led.RgbFadeAnimation;
-import com.ctre.phoenix.led.SingleFadeAnimation;
-import com.ctre.phoenix.led.StrobeAnimation;
-import com.ctre.phoenix.led.TwinkleAnimation;
-import com.ctre.phoenix.led.TwinkleOffAnimation;
+import static edu.wpi.first.units.Units.*;
+
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CANdleConfiguration;
+import com.ctre.phoenix6.controls.*;
+import com.ctre.phoenix6.controls.ColorFlowAnimation;
+import com.ctre.phoenix.led.*;
+import com.ctre.phoenix6.hardware.CANdle;
+import com.ctre.phoenix6.signals.AnimationDirectionValue;
+import com.ctre.phoenix6.signals.RGBWColor;
+import com.ctre.phoenix6.signals.StatusLedWhenActiveValue;
+import com.ctre.phoenix6.signals.StripTypeValue;
+
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LightsSubsystem extends SubsystemBase {
 
-    private CANdle led;
-
-    private ColorFlowAnimation colorFlowAnimation;
-    private FireAnimation fireAnimation;
-    private LarsonAnimation larsonAnimation;
-    private RainbowAnimation rainbowAnimation;
-    private RgbFadeAnimation rgbFadeAnimation;
-    private SingleFadeAnimation singleFadeAnimation;
-    private StrobeAnimation strobeAnimation;
-    private TwinkleAnimation twinkleAnimation;
-    private TwinkleOffAnimation twinkleOffAnimation;
+    private final CANdle led;
 
     private CANdleConfiguration config;
 
@@ -35,40 +31,31 @@ public class LightsSubsystem extends SubsystemBase {
 
     public LightsSubsystem() {
 
-        led = new CANdle(27, "rio");
+        led = new CANdle(27, CANBus.roboRIO());
 
         config = new CANdleConfiguration();
-        config.brightnessScalar = 0.5;
-        led.configAllSettings(config);
+        config.LED.BrightnessScalar = 0.5; // Adjust brightness (0.0 to 1.0)
+        config.LED.StripType = StripTypeValue.RGBW; // Set the type
+
+        led.getConfigurator().apply(config);
 
     }
 
     public void defaultPattern() {
-        led.clearAnimation(0);
-        led.setLEDs(125, 35, 250);
+        led.setControl(new EmptyAnimation(0));
+        led.setControl(new SolidColor(0, ledCount).withColor(new RGBWColor(0, 0, 0, 0)));
+        
     }
 
     public void disable() {
-        led.setLEDs(0, 0, 0);
-        led.clearAnimation(0);
+        led.setControl(new SolidColor(0, ledCount).withColor(new RGBWColor(0, 0, 0, 0)));
+        led.setControl(new EmptyAnimation(0));
     }
 
-    public void playColorFlowAnimation(int r, int g, int b, int w, double speed, Direction direction) {
-        colorFlowAnimation = new ColorFlowAnimation(r, g, b, w, speed, ledCount, direction);
-        led.animate(colorFlowAnimation);
-    }
-
-    public void playRainbowAnimation(double brightness, double speed) {
-        rainbowAnimation = new RainbowAnimation(brightness, speed, ledCount);
-        led.animate(rainbowAnimation);
-    }
-    /**
-     * Plays a flashing animation 
-     * @param speed 
-     */
-    public void playStrobeAnimation(int r, int g, int b, int w, double speed) {
-        strobeAnimation = new StrobeAnimation(r, g, b, w, speed, ledCount);
-        led.animate(strobeAnimation);
+    public void playColorFlowAnimation(int r, int g, int b, int w) {
+        ColorFlowAnimation colorFlowAnimation = new ColorFlowAnimation(0, ledCount)
+            .withColor(new RGBWColor(r, g, b, w));
+        led.setControl(colorFlowAnimation);
     }
     // ... add others ...
 
