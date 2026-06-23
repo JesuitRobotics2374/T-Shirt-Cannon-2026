@@ -13,8 +13,8 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.subsystems.DriveTrainSubsystem;
 import frc.robot.subsystems.PivotSubsystem;
 //import frc.robot.subsystems.IndexerSubsystem;
+import frc.robot.subsystems.LightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.LightsSubsystem;
 import java.util.List;
 import java.util.Arrays;
 
@@ -23,7 +23,7 @@ public class RobotContainer {
     private final DriveTrainSubsystem m_DriveTrainSubsystem;
     private final ShooterSubsystem m_ShooterSubsystem;
     private final PivotSubsystem m_PivotSubsystem;
-    private final LightsSubsystem m_LightsSubsystem;
+    private final LightSubsystem m_LightSubsystem;
 
     private final XboxController m_driveController = new XboxController(Constants.CONTROLLER_USB_PORT_DRIVER);
     public static final int CONTROLLER_USB_PORT_DRIVER = 0; // Drivers Controller
@@ -38,7 +38,7 @@ public class RobotContainer {
         m_DriveTrainSubsystem = new DriveTrainSubsystem();
         m_PivotSubsystem = new PivotSubsystem();
         m_ShooterSubsystem = new ShooterSubsystem();
-        m_LightsSubsystem = new LightsSubsystem();
+        m_LightSubsystem = new LightSubsystem();
         resetDrive();
         configureButtonBindings();
         configureShuffleBoard();
@@ -158,6 +158,10 @@ public class RobotContainer {
 
     public PivotSubsystem getPivotSubsystem() {
         return m_PivotSubsystem;
+    }
+
+    public LightSubsystem getLightSubsystem() {
+        return m_LightSubsystem;
     }
 
 }
