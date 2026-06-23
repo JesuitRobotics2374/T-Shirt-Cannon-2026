@@ -23,11 +23,9 @@ public class Constants {
     public static final double pivotControllerMaxVelocity = 4.5;
     public static final double pivotControllerMaxAcceleration = 4.5;
     public static final double FEED_FORWARD_VOLTAGE = 0.0;
-    public static final double UPPER_SOFT_STOP = .09;
-    // public static final double FORWARD_SOFT_STOP = -1;
-    public static final double LOWER_SOFT_STOP = 0.0;
-    // public static final double BACKWARD_SOFT_STOP = 15;
-    public static final double PIVOT_PID_P = 9.0;
+    //public static final double UPPER_SOFT_STOP = .083;  //ACCURATE
+    public static final double UPPER_SOFT_STOP = .07;  //Equals about 0.07*360=25.2 degrees
+    public static final double LOWER_SOFT_STOP = 0;  //Equals about 0.07*360=25.2 degrees
     public static final double PIVOT_PID_I = 0.0;
     public static final double PIVOT_PID_D = 0.0;
 

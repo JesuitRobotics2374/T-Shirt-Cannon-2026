@@ -46,8 +46,9 @@ public class PivotSubsystem extends SubsystemBase {
         pivotEncoder.getConfigurator()
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(0.5)
                         .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withMagnetOffset(.094));
-        pivotController.enableContinuousInput(-.5, .5);
+        //pivotController.enableContinuousInput(-.5, .5);
         pivotController.setTolerance(0.01, 0.01);
+        pivotEncoder.setPosition(0);
         goal = pivotEncoder.getAbsolutePosition().getValueAsDouble();
         pivotController.reset(goal);
         pivotController.setGoal(goal);
@@ -70,10 +71,10 @@ public class PivotSubsystem extends SubsystemBase {
     }
 
     public void setGoal(double degrees) {
-        goal = degrees / 360;
-        pivotController.setGoal(goal);
+        double jacob = degrees / 360;
+        pivotController.setGoal(jacob);
         // goal = degrees / 360;
-        System.out.println("set goal");
+        System.out.println("(set goal): " + jacob);
     }
 
     public boolean atGoal() {
@@ -90,10 +91,13 @@ public class PivotSubsystem extends SubsystemBase {
      */
 
     public void raise() {
-        double increment = 1;
+        //increment is in degrees
+        double increment = 5;
         System.out.println("Raise Goal:" + goal);
+        System.out.println("abs position: " + getAbsPos());
         double newGoal = goal + toAbsVal(increment);
         goal = Math.min(Constants.UPPER_SOFT_STOP, newGoal);
+        //setgoal is taking the ratio from 0 to 1.
         pivotController.setGoal(goal);
     }
 
@@ -111,10 +115,10 @@ public class PivotSubsystem extends SubsystemBase {
      */
 
     public void lower() {
-        double increment = 1;
+        double increment = 5;
         System.out.println("Lower Goal:" + goal);
         double newGoal = goal - toAbsVal(increment);
-        goal = Math.min(Constants.UPPER_SOFT_STOP, newGoal);
+        goal = Math.max(Constants.LOWER_SOFT_STOP, newGoal);
         pivotController.setGoal(goal);
     }
 
@@ -127,6 +131,8 @@ public class PivotSubsystem extends SubsystemBase {
         goal = pivotEncoder.getAbsolutePosition().getValueAsDouble();
         pivotController.reset(goal);
         pivotController.setGoal(goal);
+        System.out.println("abspos:" + getAbsPos());
+        System.out.println(goal);
     }
 
     public double getGoal() {
