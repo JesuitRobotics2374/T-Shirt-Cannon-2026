@@ -26,6 +26,8 @@ public class Constants {
     //public static final double UPPER_SOFT_STOP = .083;  //ACCURATE
     public static final double UPPER_SOFT_STOP = .07;  //Equals about 0.07*360=25.2 degrees
     public static final double LOWER_SOFT_STOP = 0;  //Equals about 0.07*360=25.2 degrees
+    
+    public static final double PIVOT_PID_P = 9.0;
     public static final double PIVOT_PID_I = 0.0;
     public static final double PIVOT_PID_D = 0.0;
 
