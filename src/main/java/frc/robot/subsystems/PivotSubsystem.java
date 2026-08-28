@@ -42,7 +42,7 @@ public class PivotSubsystem extends SubsystemBase {
     public PivotSubsystem() {
         instance = this;
         pivotMotor.setNeutralMode(NeutralModeValue.Brake);
-        pivotMotor.getConfigurator().apply(new MotorOutputConfigs().withInverted(InvertedValue.Clockwise_Positive));
+        pivotMotor.getConfigurator().apply(new MotorOutputConfigs().withInverted(InvertedValue.CounterClockwise_Positive));
         pivotEncoder.getConfigurator()
                 .apply(new MagnetSensorConfigs().withAbsoluteSensorDiscontinuityPoint(0.5)
                         .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive).withMagnetOffset(.094));
