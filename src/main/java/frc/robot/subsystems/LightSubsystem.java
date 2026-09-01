@@ -34,7 +34,7 @@ public class LightSubsystem extends SubsystemBase {
 
         config = new CANdleConfiguration();
         config.LED.BrightnessScalar = 0.5; // Adjust brightness (0.0 to 1.0)
-        config.LED.StripType = StripTypeValue.RGBW; // Set the type
+        config.LED.StripType = StripTypeValue.GRB; // Set the type
 
         led.clearAllAnimations();
         led.getConfigurator().apply(config);

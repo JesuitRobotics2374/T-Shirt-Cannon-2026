@@ -162,8 +162,4 @@ public class RobotContainer {
         return m_PivotSubsystem;
     }
 
-    public LightSubsystem getLightSubsystem() {
-        return m_LightSubsystem;
-    }
-
 }
