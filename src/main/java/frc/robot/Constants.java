@@ -34,7 +34,7 @@ public class Constants {
     // Shooter Subsystem
     public static final int PCM_ID = 30; // TBD
     public static final int numShooters = 6;
-    public static final int solenoidAChannel = 0; // TBD
+    public static final int solenoidAChannel = 6; // TBD
     public static final int solenoidBChannel = 1; // TBD
     public static final int solenoidCChannel = 2; // TBD
     public static final int solenoidDChannel = 3; // TBD

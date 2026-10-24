@@ -123,6 +123,9 @@ public class RobotContainer {
         new Trigger(m_driveController::getBButton).onTrue(new InstantCommand(m_ShooterSubsystem::shoot));
         new Trigger(m_driveController::getXButton).onTrue(new InstantCommand(m_ShooterSubsystem::reloadAll));
 
+        new Trigger(m_driveController::getAButton).onTrue(new InstantCommand(() -> m_ShooterSubsystem.shootAtPos(0)));
+        new Trigger(m_driveController::getYButton).onTrue(new InstantCommand(() -> m_ShooterSubsystem.shootAtPos(1)));
+
         /*
          * new Trigger(() -> {
          * int d = m_driveController.getPOV();

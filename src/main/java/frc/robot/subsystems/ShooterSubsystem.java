@@ -42,13 +42,17 @@ public class ShooterSubsystem extends SubsystemBase {
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
                 new InstantCommand(() -> {
+                    if (shootPos >= Constants.numShooters) {
+                        shootPos = 0;
+                    }
                     solenoids[shootPos].set(true);
+                    System.out.println("shootPos: " + shootPos);
                 }),
                 new WaitCommand(Constants.waitTime),
                 new InstantCommand(() -> {
                     solenoids[shootPos].set(false);
                     status[shootPos] = false;
-
+                    
                     while (!status[shootPos]) {
                         shootPos++;
                         if (shootPos >= Constants.numShooters) {
@@ -84,11 +88,18 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shootAtPos(int pos) {
-        if (status[pos]) {
-            System.out.println(pos);
-            shootPos = pos;
-            shoot();
-        }
+        System.out.println(pos);
+
+        SequentialCommandGroup command = new SequentialCommandGroup();
+        command.addCommands(
+                new InstantCommand(() -> {
+                    solenoids[pos].set(true);
+                }),
+                new WaitCommand(Constants.waitTime),
+                new InstantCommand(() -> {
+                    solenoids[pos].set(false);
+                }));
+        command.schedule();
     }
 
     public int getShotLeft() {
@@ -107,7 +118,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     public int getNextBarrel() {
         if (shootPos + 1 == 7) {
-            return -1;
+            return shootPos % 6;
         }
         return shootPos + 1;
     }
