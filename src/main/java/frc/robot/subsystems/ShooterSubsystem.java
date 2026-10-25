@@ -31,6 +31,7 @@ public class ShooterSubsystem extends SubsystemBase {
     private PWMChannel channel = PWMChannel.PWMChannel0;
 
     int shootPos = 0;
+    private boolean firing = false; // ignore B presses until the current shot finishes
 
     public ShooterSubsystem() {
         for (Solenoid solenoid : solenoids) {
@@ -39,12 +40,13 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void shoot() {
+        if (firing || shootPos >= Constants.numShooters) {
+            return;
+        }
+        firing = true;
         SequentialCommandGroup command = new SequentialCommandGroup();
         command.addCommands(
                 new InstantCommand(() -> {
-                    if (shootPos >= Constants.numShooters) {
-                        shootPos = 0;
-                    }
                     solenoids[shootPos].set(true);
                     System.out.println("shootPos: " + shootPos);
                 }),
@@ -52,7 +54,8 @@ public class ShooterSubsystem extends SubsystemBase {
                 new InstantCommand(() -> {
                     solenoids[shootPos].set(false);
                     status[shootPos] = false;
-                    
+                    firing = false;
+
                     while (!status[shootPos]) {
                         shootPos++;
                         if (shootPos >= Constants.numShooters) {
@@ -85,6 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
             status[i] = true;
         }
         shootPos = 0;
+        firing = false; // unsticks B if a shot was cancelled (e.g. robot disabled mid-shot)
     }
 
     public void shootAtPos(int pos) {
@@ -117,9 +121,9 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public int getNextBarrel() {
-        if (shootPos + 1 == 7) {
-            return shootPos % 6;
+        if (shootPos >= Constants.numShooters) {
+            return -1;
         }
-        return shootPos + 1;
+        return shootPos;
     }
 }
